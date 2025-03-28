@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+
+.active {
+  display: none !important;
+}
+
+@tailwind utilities;
