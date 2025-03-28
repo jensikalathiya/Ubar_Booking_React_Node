@@ -37,14 +37,18 @@ module.exports.createRide = async (req, res) => {
     });
     res.status(201).json(ride);
 
-    // You can use coordinates from the `pickup` and `destination` directly since they already contain `lat` and `lng`
-    const captainsInRadius = await mapService.getCaptainsInTheRadius(
-      pickup.lat,
-      pickup.lng,
-      2
+    const pickupCoordinates = await mapService.getAddressCoordinate(
+      pickup.name
     );
 
+    // You can use coordinates from the `pickup` and `destination` directly since they already contain `lat` and `lng`
+    const captainsInRadius = await mapService.getCaptainsInTheRadius(
+      pickupCoordinates.ltd,
+      pickupCoordinates.lng,
+      2
+    );
     ride.otp = "";
+
 
     const rideWithUser = await rideModel
       .findOne({ _id: ride._id })
@@ -119,7 +123,6 @@ module.exports.startRide = async (req, res) => {
       captain: req.captain,
     });
 
-    console.log(ride);
 
     sendMessageToSocketId(ride.user.socketId, {
       event: "ride-started",

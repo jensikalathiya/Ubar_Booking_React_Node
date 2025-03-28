@@ -1,22 +1,19 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import {
   GoogleMap,
   MarkerF,
   DirectionsRenderer,
   LoadScript,
 } from "@react-google-maps/api";
-import { LocationContext } from "../context/LocationContext";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
 
-const LiveTracking = ({ pickup, destinationvalue }) => {
-  const { pickupLocation, destinationLocation } = useContext(LocationContext);
+const LiveTracking = ({ pickupLocation, destinationLocation }) => {
   const source = pickupLocation;
   const destination = destinationLocation;
-  console.log(source);
 
   const [center, setCenter] = useState({
     lat: source?.lat || 21.2266205,
@@ -25,6 +22,7 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
   const [map, setMap] = useState(null);
   const [directionRoutePoints, setDirectionRoutePoints] = useState(null);
   const [vehicleLocation, setVehicleLocation] = useState(null);
+  const [isApiLoaded, setIsApiLoaded] = useState(false);
 
   useEffect(() => {
     if (source?.lat && source?.lng && map) {
@@ -40,14 +38,14 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
   }, [destination, map]);
 
   useEffect(() => {
-    if (source && destination && map) {
+    if (isApiLoaded && source && destination && map) {
       directionRoute();
     }
-  }, [source, destination, map]);
+  }, [isApiLoaded, source, destination, map]);
 
   const directionRoute = () => {
-    if (!window.google) {
-      console.error("Google Maps API is not loaded");
+    if (!window.google || !window.google.maps) {
+      console.error("Google Maps API is not loaded yet.");
       return;
     }
 
@@ -56,10 +54,10 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
       {
         origin: { lat: source.lat, lng: source.lng },
         destination: { lat: destination.lat, lng: destination.lng },
-        travelMode: window.google.maps.TravelMode.DRIVING,
+        travelMode: window.google?.maps?.TravelMode.DRIVING,
       },
       (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
+        if (status === window.google?.maps?.DirectionsStatus.OK) {
           setDirectionRoutePoints(result);
           startVehicleTracking(result.routes[0].overview_path);
         } else {
@@ -82,15 +80,19 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
   };
 
   return (
-    <LoadScript googleMapsApiKey={"AIzaSyAy1EmmZYXtEjbDPvV7gIW0Qs2oD6WKi2o"}>
+    <LoadScript
+      googleMapsApiKey={"AIzaSyAy1EmmZYXtEjbDPvV7gIW0Qs2oD6WKi2o"} // Replace with your actual API key
+      onLoad={() => setIsApiLoaded(true)}
+      onError={() => console.error("Error loading Google Maps API")}
+    >
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         zoom={13}
         onLoad={(map) => setMap(map)}
-        options={{ mapId: "4113717585f11867" }}
+        options={{ mapId: "4113717585f11867", mapTypeId: "terrain" }}
       >
-        {source && source.lat && source.lng && (
+        {isApiLoaded && source?.lat && source?.lng && (
           <MarkerF
             position={{ lat: source.lat, lng: source.lng }}
             icon={{
@@ -100,7 +102,7 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
           />
         )}
 
-        {destination && destination.lat && destination.lng && (
+        {isApiLoaded && destination?.lat && destination?.lng && (
           <MarkerF
             position={{ lat: destination.lat, lng: destination.lng }}
             icon={{
@@ -110,7 +112,7 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
           />
         )}
 
-        {vehicleLocation && (
+        {isApiLoaded && vehicleLocation && (
           <MarkerF
             position={vehicleLocation}
             icon={{
@@ -119,7 +121,6 @@ const LiveTracking = ({ pickup, destinationvalue }) => {
             }}
           />
         )}
-
         {directionRoutePoints && (
           <DirectionsRenderer directions={directionRoutePoints} />
         )}

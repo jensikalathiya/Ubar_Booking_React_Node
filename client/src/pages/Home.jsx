@@ -38,9 +38,6 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  console.log("pickup", pickup);
-  console.log("destination", destination);
-
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserDataContext);
 
@@ -55,7 +52,6 @@ const Home = () => {
   });
 
   socket.on("ride-started", (ride) => {
-    console.log("ride");
     setWaitingForDriver(false);
     navigate("/riding", { state: { ride } }); // Updated navigate to include ride data
   });
@@ -228,7 +224,10 @@ const Home = () => {
       />
       <div className="h-screen w-screen">
         {/* image for temporary use  */}
-        <LiveTracking />
+        <LiveTracking
+          pickupLocation={pickup}
+          destinationLocation={destination}
+        />
       </div>
       <div
         className={` flex flex-col justify-end  absolute bottom-0 w-full ${active}`}

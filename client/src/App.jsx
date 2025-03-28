@@ -13,7 +13,6 @@ import CaptainLogout from "./pages/CaptainLogout";
 import Riding from "./pages/Riding";
 import CaptainRiding from "./pages/CaptainRiding";
 import "remixicon/fonts/remixicon.css";
-import { LocationProvider } from "./context/LocationContext";
 
 const App = () => {
   return (
@@ -31,9 +30,7 @@ const App = () => {
           path="/home"
           element={
             <UserProtectWrapper>
-              <LocationProvider>
                 <Home />
-              </LocationProvider>
             </UserProtectWrapper>
           }
         />
@@ -49,7 +46,7 @@ const App = () => {
           path="/captain-home"
           element={
             <CaptainProtectWrapper>
-              <CaptainHome />
+                <CaptainHome />
             </CaptainProtectWrapper>
           }
         />

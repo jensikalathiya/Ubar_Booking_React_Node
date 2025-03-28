@@ -1,22 +1,14 @@
-import { useContext } from "react";
-import { LocationContext } from "../context/LocationContext";
-
 const LocationSearchPanel = ({
   suggestions,
   setPickup,
   setDestination,
   activeField,
 }) => {
-  const { setDestinationLocation, setPickupLocation } =
-    useContext(LocationContext);
-
   const handleSuggestionClick = (suggestion) => {
     if (activeField === "pickup") {
       setPickup(suggestion);
-      setPickupLocation(suggestion);
     } else if (activeField === "destination") {
       setDestination(suggestion);
-      setDestinationLocation(suggestion);
     }
     // setVehiclePanel(true)
     // setPanelOpen(false)

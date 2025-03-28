@@ -42,7 +42,6 @@ module.exports.loginUser = async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-    console.log('req.body', req.body)
 
     const user = await userModel.findOne({ email }).select('+password');
 
