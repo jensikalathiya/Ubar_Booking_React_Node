@@ -18,19 +18,21 @@ const CaptainHome = () => {
   const confirmRidePopupPanelRef = useRef(null);
   const [ride, setRide] = useState(null);
 
+  console.log("ride", ride);
+
   const { socket } = useContext(SocketContext);
   const { captain } = useContext(CaptainDataContext);
 
   useEffect(() => {
     socket.emit("join", {
-      userId: captain._id,
+      userId: captain?._id,
       userType: "captain",
     });
     const updateLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           socket.emit("update-location-captain", {
-            userId: captain._id,
+            userId: captain?._id,
             location: {
               ltd: position.coords.latitude,
               lng: position.coords.longitude,

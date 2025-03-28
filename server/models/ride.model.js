@@ -38,17 +38,20 @@ const rideSchema = new mongoose.Schema({
       required: true,
     },
   },
+  vehicleType: {
+    type: String,
+    enum: ["car", "moto", "auto"],
+    required: true,
+  },
   fare: {
     type: Number,
     required: true,
   },
-
   status: {
     type: String,
     enum: ["pending", "accepted", "ongoing", "completed", "cancelled"],
     default: "pending",
   },
-
   duration: {
     type: Number,
   }, // in seconds

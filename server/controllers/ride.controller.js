@@ -12,6 +12,7 @@ module.exports.createRide = async (req, res) => {
 
   const { userId, pickup, destination, vehicleType } = req.body;
 
+
   // Validate that pickup and destination are objects with lat, lng, and name properties
   if (!pickup || !pickup.name || !pickup.lat || !pickup.lng) {
     return res.status(400).json({ message: "Invalid pickup location data" });
@@ -48,7 +49,6 @@ module.exports.createRide = async (req, res) => {
       2
     );
     ride.otp = "";
-
 
     const rideWithUser = await rideModel
       .findOne({ _id: ride._id })
@@ -96,6 +96,8 @@ module.exports.confirmRide = async (req, res) => {
       captain: req.captain,
     });
 
+    console.log("ride", ride);
+
     sendMessageToSocketId(ride.user.socketId, {
       event: "ride-confirmed",
       data: ride,
@@ -123,6 +125,7 @@ module.exports.startRide = async (req, res) => {
       captain: req.captain,
     });
 
+    
 
     sendMessageToSocketId(ride.user.socketId, {
       event: "ride-started",

@@ -51,9 +51,10 @@ module.exports.getDistanceTime = async (origin, destination) => {
     throw err;
   }
 };
+
 module.exports.getAutoCompleteSuggestions = async (input) => {
   if (!input) {
-    throw new Error("query is required");
+    throw new Error("Query is required");
   }
 
   const apiKey = process.env.GOOGLE_MAPS_API;
@@ -63,6 +64,8 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 
   try {
     const response = await axios.get(url);
+    // console.log("Autocomplete API Response:", response.data); // Log the full response
+
     if (response.data.status === "OK") {
       const placeDetailsPromises = response.data.predictions.map(
         async (prediction) => {
@@ -88,7 +91,7 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
       const locations = await Promise.all(placeDetailsPromises);
       return locations.filter((location) => location); // Filter out null/undefined locations
     } else {
-      throw new Error("Unable to fetch suggestions");
+      throw new Error(`Unable to fetch suggestions: ${response.data.status}`);
     }
   } catch (err) {
     console.error(err);

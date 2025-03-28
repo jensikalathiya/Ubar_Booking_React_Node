@@ -42,7 +42,7 @@ const Home = () => {
   const { user } = useContext(UserDataContext);
 
   useEffect(() => {
-    socket.emit("join", { userType: "user", userId: user._id });
+    socket.emit("join", { userType: "user", userId: user?._id });
   }, [user]);
 
   socket.on("ride-confirmed", (ride) => {
@@ -199,13 +199,14 @@ const Home = () => {
     setActive("active");
   }
 
+  console.log("vehicleType", vehicleType);
   async function createRide() {
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/rides/create`,
       {
         pickup: pickup,
         destination: destination,
-        vehicleType,
+        vehicleType: vehicleType,
       },
       {
         headers: {
@@ -238,7 +239,7 @@ const Home = () => {
             onClick={() => {
               setPanelOpen(false);
             }}
-            className="absolute opacity-0 right-6 top-6 text-2xl"
+            className="absolute opacity-0 right-6 top-6 text-2xl cursor-pointer"
           >
             <i className="ri-arrow-down-wide-line"></i>
           </h5>
