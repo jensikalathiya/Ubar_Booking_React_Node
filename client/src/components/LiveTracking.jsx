@@ -82,7 +82,7 @@ const LiveTracking = ({ ride, pickupLocation, destinationLocation }) => {
       console.error("Google Maps API is not loaded yet.");
       return;
     }
-
+  
     const DirectionsService = new window.google.maps.DirectionsService();
     DirectionsService.route(
       {
@@ -93,7 +93,12 @@ const LiveTracking = ({ ride, pickupLocation, destinationLocation }) => {
       (result, status) => {
         if (status === window.google?.maps?.DirectionsStatus.OK) {
           setDirectionRoutePoints(result);
-          startVehicleTracking(result.routes[0].overview_path);
+          // Check if overview_path exists and is an array
+          if (result.routes[0]?.overview_path && Array.isArray(result.routes[0].overview_path)) {
+            startVehicleTracking(result.routes[0].overview_path);
+          } else {
+            console.error("No valid overview_path found in directions result.");
+          }
           setLoading(false);
         } else {
           console.error("Error fetching directions:", status);
@@ -102,8 +107,13 @@ const LiveTracking = ({ ride, pickupLocation, destinationLocation }) => {
       }
     );
   };
-
+  
   const startVehicleTracking = (path) => {
+    if (!path || !Array.isArray(path) || path.length === 0) {
+      console.error("Invalid path provided to startVehicleTracking.");
+      return; // Exit if path is invalid
+    }
+  
     let index = 0;
     const interval = setInterval(() => {
       if (index < path.length) {
@@ -113,7 +123,7 @@ const LiveTracking = ({ ride, pickupLocation, destinationLocation }) => {
         };
         setVehicleLocation(currentLocation);
         source = currentLocation;
-
+  
         // Calculate the next location for heading
         if (index < path.length - 1) {
           const nextLocation = {
@@ -129,19 +139,24 @@ const LiveTracking = ({ ride, pickupLocation, destinationLocation }) => {
           );
           setRotation(heading);
         }
-
+  
+        // Pan the map to the vehicle's current location
+        if (map) {
+          map.panTo(currentLocation);
+        }
+  
         // Check if the vehicle has reached the destination
         if (haversineDistance(currentLocation, destination) < 0.1) {
           clearInterval(interval);
           endRide();
         }
-
+  
         index++;
       } else {
         clearInterval(interval);
       }
     }, 2000);
-
+  
     return interval; // Return the interval ID for cleanup
   };
 
