@@ -22,6 +22,8 @@ const FinishRide = (props) => {
     }
   }
 
+  
+
   return (
     <div>
       <h5

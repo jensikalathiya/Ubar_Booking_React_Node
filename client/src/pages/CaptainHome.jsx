@@ -18,10 +18,12 @@ const CaptainHome = () => {
   const confirmRidePopupPanelRef = useRef(null);
   const [ride, setRide] = useState(null);
 
-  console.log("ride", ride);
+  // console.log("ride", ride);
 
   const { socket } = useContext(SocketContext);
   const { captain } = useContext(CaptainDataContext);
+
+  // console.log("captain", captain);
 
   useEffect(() => {
     socket.emit("join", {
@@ -49,8 +51,10 @@ const CaptainHome = () => {
   }, []);
 
   socket.on("new-ride", (data) => {
-    setRide(data);
-    setRidePopupPanel(true);
+    if (data.vehicleType === captain.vehicle.vehicleType) {
+      setRide(data);
+      setRidePopupPanel(true);
+    }
   });
 
   async function confirmRide() {

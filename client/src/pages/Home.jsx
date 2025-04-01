@@ -199,7 +199,6 @@ const Home = () => {
     setActive("active");
   }
 
-  console.log("vehicleType", vehicleType);
   async function createRide() {
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/rides/create`,
@@ -226,6 +225,7 @@ const Home = () => {
       <div className="h-screen w-screen">
         {/* image for temporary use  */}
         <LiveTracking
+          ride={ride}
           pickupLocation={pickup}
           destinationLocation={destination}
         />

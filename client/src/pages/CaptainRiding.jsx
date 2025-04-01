@@ -43,7 +43,7 @@ const CaptainRiding = () => {
       </div>
 
       <div
-        className="h-1/5 p-6 flex items-center justify-between relative bg-yellow-400 pt-10"
+        className=" p-6 flex items-center justify-between relative bg-yellow-400 pt-10 z-10"
         onClick={() => {
           setFinishRidePanel(true);
         }}
@@ -58,6 +58,13 @@ const CaptainRiding = () => {
         <button className=" bg-green-600 text-white font-semibold p-3 px-10 rounded-lg">
           Complete Ride
         </button>
+      </div> 
+        <div className="h-screen fixed w-screen top-0 ">
+        <LiveTracking
+          ride={rideData}
+          pickupLocation={rideData.pickup}
+          destinationLocation={rideData.destination}
+        />
       </div>
       <div
         ref={finishRidePanelRef}
@@ -66,12 +73,7 @@ const CaptainRiding = () => {
         <FinishRide ride={rideData} setFinishRidePanel={setFinishRidePanel} />
       </div>
 
-      <div className="h-screen fixed w-screen top-0 z-[-1]">
-        <LiveTracking
-          pickupLocation={rideData.pickup}
-          destinationLocation={rideData.destination}
-        />
-      </div>
+   
     </div>
   );
 };
