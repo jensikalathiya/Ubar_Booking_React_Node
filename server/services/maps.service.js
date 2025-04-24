@@ -64,7 +64,7 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 
   try {
     const response = await axios.get(url);
-    // console.log("Autocomplete API Response:", response.data); // Log the full response
+    console.log("Autocomplete API Response:", response.data); // Log the full response
 
     if (response.data.status === "OK") {
       const placeDetailsPromises = response.data.predictions.map(

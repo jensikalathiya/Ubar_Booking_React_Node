@@ -96,7 +96,7 @@ module.exports.confirmRide = async (req, res) => {
       captain: req.captain,
     });
 
-    console.log("ride", ride);
+    // console.log("ride", ride);
 
     sendMessageToSocketId(ride.user.socketId, {
       event: "ride-confirmed",

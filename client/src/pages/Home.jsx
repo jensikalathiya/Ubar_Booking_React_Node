@@ -250,7 +250,43 @@ const Home = () => {
               submitHandler(e);
             }}
           >
-            <div className="line absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div>
+            <div className="absolute top-6 left-2.5">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                data-baseweb="icon"
+              >
+                <title>search</title>
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm5-2a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+
+            <div className="line absolute h-12 w-[2px] top-[50%] -translate-y-1/2 left-[21px] bg-gray-700 rounded-full"></div>
+
+            <div className="absolute top-[76px] left-2.5">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                data-baseweb="icon"
+              >
+                <title>search</title>
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M14 10h-4v4h4v-4ZM7 7v10h10V7H7Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
             <input
               onClick={() => {
                 setPanelOpen(true);
